@@ -86,21 +86,26 @@ class FinancialPredictor:
             df_tipo = df_agg[df_agg['tipo'] == tipo].copy()
             
             if len(df_tipo) < 3:
+                # Dados insuficientes, usar média simples
                 self.models[tipo] = float(np.mean(df_tipo['valor'])) if not df_tipo.empty else 0.0
                 accuracy_scores[tipo] = {"r2": 0.0, "mape": 0.0}
-                continue
-            
-            X = df_tipo[feature_columns]
-            y = df_tipo['valor']
-            
-            self.models[tipo].fit(X, y)
-            
-            # Avaliação
-            y_pred = self.models[tipo].predict(X)
-            r2 = r2_score(y, y_pred)
-            mape = 1 - mean_absolute_percentage_error(y, y_pred)  # 1 - erro → “quanto acertou”
-            
-            accuracy_scores[tipo] = {"r2": r2, "mape": mape}
+            else:
+                # Dados suficientes, treinar modelo
+                X = df_tipo[feature_columns]
+                y = df_tipo['valor']
+                
+                # Garantir que o modelo seja um objeto treinável
+                if isinstance(self.models[tipo], (int, float)):
+                    self.models[tipo] = LinearRegression()
+                
+                self.models[tipo].fit(X, y)
+                
+                # Avaliação
+                y_pred = self.models[tipo].predict(X)
+                r2 = r2_score(y, y_pred)
+                mape = 1 - mean_absolute_percentage_error(y, y_pred)  # 1 - erro → "quanto acertou"
+                
+                accuracy_scores[tipo] = {"r2": r2, "mape": mape}
         
         self.is_trained = True
         self.last_training_date = datetime.utcnow()

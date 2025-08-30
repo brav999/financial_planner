@@ -61,25 +61,42 @@ class DataService:
         
         predictions = self.predictor.predict_future(base_competencia, [30, 60])
         
-        # Salvar histórico de previsões
+        # Salvar histórico de previsões (evitando duplicatas)
         for key, pred in predictions.items():
             tipo = key.split('_')[0]
             periodo = int(key.split('_')[1].replace('d', ''))
             
-            acuracia_dict = pred.get('acuracia_historica', {})  # dicionário com r2 e mape
+            # Verificar se já existe previsão para esta competência/tipo/período
+            existing_prediction = db.query(PredictionHistory).filter(
+                PredictionHistory.competencia_base == base_competencia,
+                PredictionHistory.tipo == tipo,
+                PredictionHistory.periodo == periodo
+            ).first()
             
-            prediction_record = PredictionHistory(
-                competencia_base=base_competencia,
-                tipo=tipo,
-                periodo=periodo,
-                valor_previsto=pred['valor_previsto'],
-                intervalo_min=pred['intervalo_confianca'][0],
-                intervalo_max=pred['intervalo_confianca'][1],
-                modelo_usado=pred['modelo_usado'],
-                acuracia_absoluta=float(acuracia_dict.get('r2', 0.0)),
-                acuracia_relativa=float(acuracia_dict.get('mape', 0.0))
-            )
-            db.add(prediction_record)
+            if existing_prediction:
+                # Atualizar previsão existente
+                existing_prediction.valor_previsto = pred['valor_previsto']
+                existing_prediction.intervalo_min = pred['intervalo_confianca'][0]
+                existing_prediction.intervalo_max = pred['intervalo_confianca'][1]
+                existing_prediction.modelo_usado = pred['modelo_usado']
+                existing_prediction.acuracia_absoluta = float(pred.get('acuracia_historica', {}).get('r2', 0.0))
+                existing_prediction.acuracia_relativa = float(pred.get('acuracia_historica', {}).get('mape', 0.0))
+                existing_prediction.created_at = datetime.utcnow()
+            else:
+                # Criar nova previsão
+                acuracia_dict = pred.get('acuracia_historica', {})
+                prediction_record = PredictionHistory(
+                    competencia_base=base_competencia,
+                    tipo=tipo,
+                    periodo=periodo,
+                    valor_previsto=pred['valor_previsto'],
+                    intervalo_min=pred['intervalo_confianca'][0],
+                    intervalo_max=pred['intervalo_confianca'][1],
+                    modelo_usado=pred['modelo_usado'],
+                    acuracia_absoluta=float(acuracia_dict.get('r2', 0.0)),
+                    acuracia_relativa=float(acuracia_dict.get('mape', 0.0))
+                )
+                db.add(prediction_record)
         
         db.commit()
         

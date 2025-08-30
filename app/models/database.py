@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, create_engine, Index, text
+from sqlalchemy import Column, Integer, String, Float, DateTime, create_engine, Index, text, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
@@ -48,9 +48,10 @@ class PredictionHistory(Base):
     
     created_at = Column(DateTime, default=datetime.utcnow)
     
-    # Índices para consultas otimizadas
+    # Índices para consultas otimizadas e constraint único
     __table_args__ = (
         Index('idx_competencia_tipo_periodo', 'competencia_base', 'tipo', 'periodo'),
+        UniqueConstraint('competencia_base', 'tipo', 'periodo', name='uq_prediction_unique'),
     )
 
 # Criar tabelas (com tratamento de erro para produção)
