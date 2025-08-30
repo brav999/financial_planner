@@ -148,6 +148,22 @@ financial_planner/
 - **NumPy**: Computação numérica
 - **Pydantic**: Validação de dados
 
+## Métricas de Avaliação do Modelo
+
+### R² (R-quadrado / Coeficiente de Determinação)
+- Mede o quanto a variação dos dados é explicada pelo modelo.
+- Valor entre 0 e 1 (quanto mais próximo de 1, melhor).
+- Exemplo: `R² = 0.8` → 80% da variação dos valores reais é explicada pelo modelo.
+
+### MAPE (Mean Absolute Percentage Error / Erro Percentual Absoluto Médio)
+- Mede o erro médio das previsões em percentual.
+- Quanto menor, melhor a precisão.
+- Exemplo: `MAPE = 5%` → em média, a previsão está 5% distante do valor real.
+
+**Resumo rápido:**
+- **R²** → qualidade do ajuste do modelo aos dados.  
+- **MAPE** → precisão das previsões em termos percentuais.
+
 ## 🤝 Contribuição
 
 1. Faça um fork do projeto

@@ -71,14 +71,15 @@ async def monthly_update(
         predictions = data_service.generate_predictions(db, latest_competencia)
         
         return {
-            "message": "Atualização mensal realizada com sucesso",
-            "registros_processados": len(financial_data),
-            "registros_salvos": saved_count,
-            "modelos_atualizados": True,
-            "acuracia": accuracy_scores,
-            "previsoes_geradas": True,
-            "previsoes": predictions
-        }
+    "message": "Atualização mensal realizada com sucesso",
+    "registros_processados": len(financial_data),
+    "registros_salvos": saved_count,
+    "modelos_atualizados": True,
+    "acuracia_absoluta": {k: v.get("r2") for k, v in accuracy_scores.items()},
+    "acuracia_relativa": {k: v.get("mape") for k, v in accuracy_scores.items()},
+    "previsoes_geradas": True,
+    "previsoes": predictions
+    }
         
     except Exception as e:
         logger.error(f"Erro na atualização mensal: {str(e)}")

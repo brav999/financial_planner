@@ -35,13 +35,17 @@ class PredictionHistory(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     competencia_base = Column(String(7), nullable=False)  # Mês base da previsão
-    tipo = Column(String(10), nullable=False)
+    tipo = Column(String(10), nullable=False)  # receita | custo
     periodo = Column(Integer, nullable=False)  # 30 ou 60 dias
     valor_previsto = Column(Float, nullable=False)
     intervalo_min = Column(Float, nullable=False)
     intervalo_max = Column(Float, nullable=False)
     modelo_usado = Column(String(50), nullable=False)
-    acuracia = Column(Float)
+    
+    # Novos campos de acurácia
+    acuracia_absoluta = Column(Float)  # Ex: 0.35
+    acuracia_relativa = Column(Float)  # Ex: 35% em relação ao valor real
+    
     created_at = Column(DateTime, default=datetime.utcnow)
     
     # Índices para consultas otimizadas

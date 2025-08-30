@@ -66,6 +66,8 @@ class DataService:
             tipo = key.split('_')[0]
             periodo = int(key.split('_')[1].replace('d', ''))
             
+            acuracia_dict = pred.get('acuracia_historica', {})  # dicionário com r2 e mape
+            
             prediction_record = PredictionHistory(
                 competencia_base=base_competencia,
                 tipo=tipo,
@@ -74,7 +76,8 @@ class DataService:
                 intervalo_min=pred['intervalo_confianca'][0],
                 intervalo_max=pred['intervalo_confianca'][1],
                 modelo_usado=pred['modelo_usado'],
-                acuracia=pred['acuracia_historica']
+                acuracia_absoluta=float(acuracia_dict.get('r2', 0.0)),
+                acuracia_relativa=float(acuracia_dict.get('mape', 0.0))
             )
             db.add(prediction_record)
         
@@ -88,6 +91,7 @@ class DataService:
             'data_base': base_competencia,
             'total_registros': len(self.get_all_financial_data(db))
         }
+
     
     def get_database_stats(self, db: Session) -> Dict:
         """Estatísticas do banco de dados"""

@@ -3,6 +3,7 @@ from typing import List, Optional
 from datetime import datetime
 import re
 
+# --- FinancialData Schemas ---
 class FinancialDataCreate(BaseModel):
     competencia: str
     tipo: str
@@ -43,10 +44,12 @@ class FinancialDataResponse(BaseModel):
     class Config:
         from_attributes = True
 
+
+# --- Predictions Schemas ---
 class PredictionResponse(BaseModel):
     valor_previsto: float
-    intervalo_confianca: List[float]
-    acuracia_historica: float
+    intervalo_confianca: List[float]  # [min, max]
+    acuracia: Optional[float] = None  # acurácia desta previsão
     modelo_usado: str
 
 class PredictionsResponse(BaseModel):
@@ -57,6 +60,8 @@ class PredictionsResponse(BaseModel):
     data_base: str
     total_registros: int
 
+
+# --- Healthcheck Schema ---
 class HealthResponse(BaseModel):
     status: str
     timestamp: datetime
@@ -64,6 +69,8 @@ class HealthResponse(BaseModel):
     total_records: int
     last_update: Optional[str]
 
+
+# --- Model Stats Schema ---
 class ModelStatsResponse(BaseModel):
     modelo_ativo: str
     total_previsoes: int
