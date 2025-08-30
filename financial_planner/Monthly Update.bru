@@ -1,0 +1,23 @@
+meta {
+  name: Monthly Update
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8000/api/monthly-update
+  body: multipartForm
+  auth: inherit
+}
+
+headers {
+  accept: application/json
+}
+
+body:multipart-form {
+  file: @file(C:\repo\financial_planner\docs\csv-example.csv)
+}
+
+settings {
+  encodeUrl: false
+}

@@ -1,0 +1,32 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data  # Apenas para SQLite local
+    environment:
+      # Para Supabase - configure estas variáveis
+      - DATABASE_URL=${DATABASE_URL}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - SUPABASE_PASSWORD=${SUPABASE_PASSWORD}
+    restart: unless-stopped
+    depends_on:
+      - db
+    # Remova a seção 'db' se estiver usando Supabase na nuvem
+
+  # Banco PostgreSQL local (opcional - use apenas se não usar Supabase cloud)
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=financial_planning
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

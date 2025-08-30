@@ -1,0 +1,19 @@
+meta {
+  name: Predictions
+  type: http
+  seq: 6
+}
+
+get {
+  url: http://localhost:8000/api/model-stats
+  body: none
+  auth: inherit
+}
+
+headers {
+  accept: application/json
+}
+
+settings {
+  encodeUrl: false
+}

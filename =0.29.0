@@ -1,0 +1,9 @@
+Collecting psycopg2-binary
+  Using cached psycopg2_binary-2.9.10-cp313-cp313-win_amd64.whl.metadata (4.8 kB)
+Collecting asyncpg
+  Using cached asyncpg-0.30.0-cp313-cp313-win_amd64.whl.metadata (5.2 kB)
+Using cached psycopg2_binary-2.9.10-cp313-cp313-win_amd64.whl (2.6 MB)
+Using cached asyncpg-0.30.0-cp313-cp313-win_amd64.whl (621 kB)
+Installing collected packages: psycopg2-binary, asyncpg
+
+Successfully installed asyncpg-0.30.0 psycopg2-binary-2.9.10

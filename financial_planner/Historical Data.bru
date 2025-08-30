@@ -1,0 +1,23 @@
+meta {
+  name: Historical Data
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8000/api/historical-data
+  body: multipartForm
+  auth: inherit
+}
+
+headers {
+  accept: application/json
+}
+
+body:multipart-form {
+  : @file(C:\repo\financial_planner\docs\csv-example.csv)
+}
+
+settings {
+  encodeUrl: false
+}

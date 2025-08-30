@@ -1,0 +1,19 @@
+meta {
+  name: Models Stats
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8000/api/model-stats
+  body: none
+  auth: inherit
+}
+
+headers {
+  accept: application/json
+}
+
+settings {
+  encodeUrl: false
+}
